@@ -3,6 +3,8 @@ import EventCard from './components/EventCard';
 import RegistrationModal from './components/RegistrationModal';
 import LoadingSpinner from './components/LoadingSpinner';
 
+const BASE_URL = "https://event-backend-mzk6.onrender.com";
+
 const dummyEvents = [
   { id: '1', name: 'Tech Symposium 2024', date: 'Oct 15, 2024', location: 'Main Auditorium', image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
   { id: '2', name: 'Design Hackathon', date: 'Nov 02, 2024', location: 'Innovation Lab', image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' },
@@ -21,27 +23,35 @@ function App() {
     fetchEvents();
   }, []);
 
-  const fetchEvents = async () => {
-    try {
-      setLoading(true);
-     const response = await fetch("https://your-backend.onrender.com/events");
-      if (!response.ok) {
-        throw new Error('Failed to reach backend API');
-      }
-      const data = await response.json();
-      setEvents(data);
-    } catch (err) {
-      console.warn('Backend API not responding, falling back to dummy mock data.', err);
-      // Fallback nicely to mock data if the API isn't up
-      setTimeout(() => {
-        setEvents(dummyEvents);
-        setError('Using Mock Data: Backend (localhost:3000) not accessible.');
-      }, 800);
-    } finally {
-      // Small artificially delayed loading spinner to demonstrate polished UI
-      setTimeout(() => setLoading(false), 800);
+  
+
+const fetchEvents = async () => {
+  try {
+    setLoading(true);
+
+    const response = await fetch(`${BASE_URL}/events`);
+
+    if (!response.ok) {
+      throw new Error('Failed to reach backend API');
     }
-  };
+
+    const data = await response.json();
+    setEvents(data);
+    setError(null); // ✅ remove error if success
+
+  } catch (err) {
+    console.error('Backend error:', err);
+
+    // ❌ REMOVE confusing localhost message
+    setError('Backend not reachable. Please try again later.');
+
+    // optional fallback (you can keep or remove)
+    setEvents(dummyEvents);
+
+  } finally {
+    setTimeout(() => setLoading(false), 500);
+  }
+};
 
   const handleRegisterClick = (event) => {
     setSelectedEvent(event);

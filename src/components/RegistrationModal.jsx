@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 
+// 🔴 IMPORTANT: Put your REAL backend URL here
+const BASE_URL = "https://event-backend-mzk6.onrender.com";
+
 const RegistrationModal = ({ event, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -9,7 +12,7 @@ const RegistrationModal = ({ event, onClose }) => {
     email: ''
   });
   
-  const [status, setStatus] = useState('idle'); // 'idle', 'loading', 'success', 'error', 'duplicate'
+  const [status, setStatus] = useState('idle'); 
   const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
@@ -29,7 +32,7 @@ const RegistrationModal = ({ event, onClose }) => {
     };
 
     try {
-      const response = await fetch("https://your-backend.onrender.com/register", {
+      const response = await fetch(`${BASE_URL}/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -37,8 +40,6 @@ const RegistrationModal = ({ event, onClose }) => {
         body: JSON.stringify(payload)
       });
 
-      // Simple mock for duplicates since json-server doesn't handle customized unique logic out-of-the-box usually, 
-      // but let's assume status 409 means duplicate
       if (response.status === 409) {
         setStatus('duplicate');
         setMessage('You are already registered for this event.');
@@ -52,16 +53,14 @@ const RegistrationModal = ({ event, onClose }) => {
       setStatus('success');
       setMessage('Successfully registered for the event!');
       
-      // Auto close after 2.5 seconds
       setTimeout(() => {
         onClose();
       }, 2500);
 
     } catch (error) {
       console.error(error);
-      // Fallback pseudo-duplicate logic if API is just generic error
       setStatus('error');
-      setMessage('An error occurred during registration. Please try again.');
+      setMessage('Backend not reachable. Please try again later.');
     }
   };
 
