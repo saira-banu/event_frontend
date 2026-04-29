@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 
-// 🔴 IMPORTANT: Put your REAL backend URL here
-const BASE_URL = "https://event-backend-mzk6.onrender.com";
+// ✅ azure  Backend URL
+const BASE_URL = "https://event-backend-hzc0dxg0drb8a3h3.koreacentral-01.azurewebsites.net";
 
 const RegistrationModal = ({ event, onClose }) => {
   const [formData, setFormData] = useState({
@@ -25,14 +25,13 @@ const RegistrationModal = ({ event, onClose }) => {
     setStatus('loading');
 
     const payload = {
-      id: Date.now().toString(),
       ...formData,
       eventId: event.id,
       eventName: event.name,
     };
 
     try {
-      const response = await fetch(`${BASE_URL}/register`, {
+      const response = await fetch(`${BASE_URL}/api/register`, { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
