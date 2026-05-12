@@ -31,7 +31,7 @@ const RegistrationModal = ({ event, onClose }) => {
     };
 
     try {
-      const response = await fetch(`${BASE_URL}/api/register`, { 
+      const response = await fetch(`${BASE_URL}/register`, { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
