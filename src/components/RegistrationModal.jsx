@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 
 // ✅ azure  Backend URL
-const BASE_URL = "https://event-backend-hzc0dxg0drb8a3h3.koreacentral-01.azurewebsites.net";
+const BASE_URL = "https://event-backend-mzk6.onrender.com";
 
 const RegistrationModal = ({ event, onClose }) => {
   const [formData, setFormData] = useState({
